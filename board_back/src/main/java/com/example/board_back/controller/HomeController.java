@@ -2,10 +2,15 @@ package com.example.board_back.controller;
 
 import com.example.board_back.model.Account;
 import com.example.board_back.repository.AccountRepository;
+import com.example.board_back.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * packageName : com.example.board_back.controller
@@ -20,31 +25,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * —————————————————————————————
  * 2023-10-11         GGG          최초 생성
  */
-@Controller
+@RestController
 public class HomeController {
 
+    @Autowired
+    AccountService accountService;
+
     @GetMapping("/")
-    public String home() {
-        return "home.jsp";
+    public ResponseEntity<Object> home() {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/login")
     public String logedin() {
         return "login.jsp";
     }
-    @GetMapping("/hello")
-    public String hello() {
+    @PutMapping("/api/register")
+    public String register(@RequestBody Account account) {
+        accountService.registry(account);
         return "hello.jsp";
     }
 
-    @Autowired
-    private AccountRepository accountRepository;
-    @GetMapping("/create")
-    @ResponseBody
-    public Account createAccount() {
-        Account account = new Account();
-        account.setEmail("a");
-        account.setPassword("{noop}a");
-        account.setAuthority("ROLE_USER");
-        return accountRepository.save(account);
-    }
 }

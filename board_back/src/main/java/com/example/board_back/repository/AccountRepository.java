@@ -1,15 +1,11 @@
 package com.example.board_back.repository;
 
 import com.example.board_back.model.Account;
-import org.springframework.stereotype.Repository;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * packageName : com.example.board_back.repository
- * fileName : UserRepository
+ * fileName : AccountRepository
  * author : GGG
  * date : 2023-10-11
  * description :
@@ -20,16 +16,5 @@ import java.util.Random;
  * —————————————————————————————
  * 2023-10-11         GGG          최초 생성
  */
-@Repository
-public class AccountRepository {
-    private Map<String, Account> accounts = new HashMap<>();
-    public Account save(Account account) {
-        Random random = new Random();
-        account.setId(random.nextInt());
-        accounts.put(account.getEmail(), account);
-        return account;
-    }
-    public Account findByEmail(String username) {
-        return accounts.get(username);
-    }
+public interface AccountRepository extends JpaRepository<Account,Long> {
 }

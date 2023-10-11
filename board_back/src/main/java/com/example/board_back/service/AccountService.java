@@ -3,6 +3,7 @@ package com.example.board_back.service;
 import com.example.board_back.model.Account;
 import com.example.board_back.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -29,14 +30,22 @@ import java.util.List;
  */
 @Service
 public class AccountService implements UserDetailsService {
+
     @Autowired
-    private AccountRepository accountRepository;
+    AccountRepository accountRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(username);
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(account.getAuthority()));
-        return new User(account.getEmail(), account.getPassword(), authorities);
+        return null;
+    }
+
+    public List<Account> getAll() {
+        List<Account> list = accountRepository.findAll();
+        return list;
+    }
+
+    public void registry(Account account) {
+        accountRepository.save(account);
+
     }
 }

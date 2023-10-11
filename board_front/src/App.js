@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Homes from './pages/Homes';
+import Register from './pages/Register';
 
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
     <div className="App">
       <Routes>
       <Route path="/" element={<Homes/>}/>
+      <Route path="/register" element={<Register/>}/>
       </Routes>
     </div>
   );
