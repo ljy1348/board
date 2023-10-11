@@ -1,10 +1,18 @@
 package com.example.board_back.configuration;
 
+//import com.example.board_back.jwt.JwtRequestFilter;
+import com.example.board_back.jwt.CustomAuthenticationSuccessHandler;
 import com.example.board_back.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * packageName : com.example.board_back.configuration
@@ -28,18 +36,25 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http
+        http    .cors().and()
                 .authorizeRequests()
-                .antMatchers("/","/login","/api/register").permitAll()
-                .antMatchers("/hello").hasRole("USER")
-                .anyRequest().authenticated()
+                .antMatchers("/","/login","/api/register","/api/login").permitAll()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .failureHandler(new CustomAuthenticationFailureHandler())
-                .loginPage("/login")
-                .defaultSuccessUrl("/create")
+                .successHandler(new CustomAuthenticationSuccessHandler())
+                .loginPage("/api/login")
                 .permitAll()
                 .and()
                 .logout().permitAll();
     }
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
 }

@@ -26,7 +26,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
             throws IOException, ServletException {
         // 로그인 실패 이유를 로그에 기록
-        System.out.println("로그인 실패");
+        System.out.println("로그인 실패 : "+exception);
 
         // 실패 이유를 request attribute에 추가
         request.setAttribute("errorMessage", exception.getMessage());

@@ -5,8 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * packageName : com.example.board_back.model
@@ -28,8 +27,18 @@ import javax.persistence.Id;
 @ToString
 public class Account {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String email;
+    @Column(unique = true, nullable = false)
+    private String username;
     private String password;
-    private String authority;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(255) default 'USER'")
+    private Authority authority;
+
+    public enum Authority {
+        USER,
+        ADMIN,
+        SUPER_ADMIN
+    }
 }

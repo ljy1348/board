@@ -15,11 +15,15 @@ function Register() {
     }
 
     let buttonClick = (event) => {
+      console.log(reg);
       event.preventDefault();
-        axios.put('http://localhost:8080/api/register', reg)
+        axios.post('http://localhost:8080/api/login', reg, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"}})
         .then(response => {
-            console.log("성공");
-
+          const token = response.headers['authorization'];
+    localStorage.setItem('token', token);
+            console.log(response);
           })
           .catch(error => {
             console.log(error);
@@ -37,7 +41,7 @@ function Register() {
         <label htmlFor="exampleFormControlInput1" className="form-label">PASSWORD</label>
         <input type="password" className="form-control" id="exampleFormControlInput2" placeholder="비밀번호" onChange={inputChange} name='password'/>
         </div>
-        <button type="submit" className="btn btn-primary" >가입</button>
+        <button type="submit" className="btn btn-primary" >로그인</button>
         </form>
     </div>
   )
