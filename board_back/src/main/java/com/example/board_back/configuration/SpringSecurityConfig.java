@@ -1,11 +1,13 @@
 package com.example.board_back.configuration;
 
 //import com.example.board_back.jwt.JwtRequestFilter;
-import com.example.board_back.jwt.CustomAuthenticationSuccessHandler;
+import com.example.board_back.jwt.JwtRequestFilter;
+import com.example.board_back.jwt.JwtUtil;
 import com.example.board_back.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -30,31 +32,34 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private JwtUtil jwtUtil; // JwtUtil 빈을 주입
+
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        JwtRequestFilter jwtRequestFilter = new JwtRequestFilter(jwtUtil, accountService);
         http.csrf().disable();
 
-        http    .cors().and()
+        http    .httpBasic().disable().cors().and()
                 .authorizeRequests()
-                .antMatchers("/","/login","/api/register","/api/login").permitAll()
+                .antMatchers("/","/api/register","/api/login").permitAll()
+                .antMatchers("/api/user/**").hasAnyRole("USER","ADMIN","SUPER_ADMIN")
+                .antMatchers("/api/admin/**").hasAnyRole("ADMIN","SUPER_ADMIN")
                 .anyRequest().permitAll()
                 .and()
-                .formLogin()
-                .failureHandler(new CustomAuthenticationFailureHandler())
-                .successHandler(new CustomAuthenticationSuccessHandler())
-                .loginPage("/api/login")
-                .permitAll()
+                .logout().permitAll().and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 중지
                 .and()
-                .logout().permitAll();
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); // JWT 필터 추가
     }
 
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 
 
 }

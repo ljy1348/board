@@ -16,9 +16,9 @@ function Register() {
 
     let buttonClick = (event) => {
       event.preventDefault();
-        axios.put('http://localhost:8080/api/register', reg)
+        axios.put('/api/register', reg)
         .then(response => {
-            console.log("성공");
+            console.log(response);
 
           })
           .catch(error => {

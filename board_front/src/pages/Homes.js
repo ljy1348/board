@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Homes() {
+  
 
-  const tokenFromLocalStorage = localStorage.getItem('token');
-console.log('Token from LocalStorage:', tokenFromLocalStorage);
+  const navigate = useNavigate();
+
 
   return (
-    <div>Homes</div>
-  )
+    <div>
+      Homes
+    </div>
+  );
 }
 
-export default Homes
+export default Homes;

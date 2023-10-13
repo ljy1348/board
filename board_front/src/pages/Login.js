@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
 
@@ -9,6 +10,8 @@ function Register() {
     }
 
     const [reg, setReg] = useState(initReg);
+    const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
 
     let inputChange = (event) => {
         setReg({...reg, [event.target.name]:event.target.value});
@@ -17,16 +20,21 @@ function Register() {
     let buttonClick = (event) => {
       console.log(reg);
       event.preventDefault();
-        axios.post('http://localhost:8080/api/login', reg, {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"}})
+        axios.post('/api/login', reg)
         .then(response => {
-          const token = response.headers['authorization'];
+          const token = response.headers.get("Authorization");
     localStorage.setItem('token', token);
-            console.log(response);
+          
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace('-', '+').replace('_', '/');
+    const decod = JSON.parse(window.atob(base64));
+          localStorage.setItem('exp',decod.exp);
+            navigate("/");
+            window.location.reload()
           })
           .catch(error => {
             console.log(error);
+            setErrorMessage(error.response.data);
           });
         }
 
@@ -43,6 +51,9 @@ function Register() {
         </div>
         <button type="submit" className="btn btn-primary" >로그인</button>
         </form>
+        <div className='mt-4 text-danger' >
+          {errorMessage}
+        </div>
     </div>
   )
 }
