@@ -74,6 +74,7 @@ public class AccountService implements UserDetailsService {
         if (account.getAuthority() == null) {
             account.setAuthority(Account.Authority.USER);
         }
+        System.out.println(account.getUsername());
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         accountRepository.save(account);
     }
@@ -87,6 +88,7 @@ public class AccountService implements UserDetailsService {
         return jwtUtil.createToken(account2);
     }
 
+//    권한 변경을 위한 권한별로 열람가능한 유저 리스트
     public List<Account> findAll() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         GrantedAuthority authority = auth.getAuthorities().stream().findFirst().orElse(null);

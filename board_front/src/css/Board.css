@@ -1,0 +1,29 @@
+.titleSpan { /* 혹은 원하는 비율로 설정 */
+    max-width: 350px;
+  }
+
+  .no {
+    width: 100px;
+  }
+
+  .author {
+    width: 100px;
+  }
+
+  .vote {
+    width: 50px;
+  }
+
+  .date {
+    width: 120px;
+  }
+
+  .titleLink{
+    color:black;
+    text-decoration-line: none;
+  }
+
+  .titleLink:hover{
+    color:gray;
+    text-decoration-line: underline ;
+  }

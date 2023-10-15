@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+
+.table-fixed-width {
+  table-layout: fixed;
+}
+
+.table-fixed-width th,
+.table-fixed-width td {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.col-1 {
+  width: 10%;
+}
+
+.col-6 {
+  width: 60%;
+}
+
+.col-2 {
+  width: 60%;
+}

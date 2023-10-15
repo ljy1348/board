@@ -10,10 +10,18 @@ function Homes() {
     navigate("/login");
   };
 
-useEffect( ()=> {const token = localStorage.getItem("token");
+useEffect( ()=> {
+  const currentTime = Date.now() / 1000;
+  if (!(localStorage.getItem('exp') <= currentTime)) {
+  const token = localStorage.getItem("token");
 if (token != null) {
   setIsLogin(true);
-}}
+}} else {
+  localStorage.removeItem('token');
+  localStorage.removeItem('exp');
+  localStorage.removeItem('name');
+}
+}
 ,[])
 
 const onClickEvent = (event) => {

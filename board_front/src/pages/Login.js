@@ -29,7 +29,8 @@ function Register() {
     const base64 = base64Url.replace('-', '+').replace('_', '/');
     const decod = JSON.parse(window.atob(base64));
           localStorage.setItem('exp',decod.exp);
-            navigate("/");
+          localStorage.setItem('name',decod.sub);
+            navigate('/');
             window.location.reload()
           })
           .catch(error => {

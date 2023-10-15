@@ -32,7 +32,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장
                 .setIssuedAt(now) // 토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + 1000*60)) // 토큰 유효시각 설정
+                .setExpiration(new Date(now.getTime() + 1000*60*60)) // 토큰 유효시각 설정
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)  // 암호화 알고리즘과, secret 값
                 .compact();
     }
@@ -65,8 +65,15 @@ public class JwtUtil {
     return Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+role));
     }
 
+//    사용자 권한 가져오기 - 단건
+    public List<SimpleGrantedAuthority> getAuthoritiesStringFromToken(String token) {
+        Claims claims = extractAllClaims(token);
+        String role = (String) claims.get("role"); // 문자열로 권한 정보를 읽어옴
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+role));
+    }
+
 //    토큰이 만료되었는지 확인
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 

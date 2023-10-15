@@ -8,7 +8,10 @@ import Header from './component/Header';
 import Admin from './pages/Admin';
 import User from './pages/User';
 import Board from './pages/Board';
-
+import NoAuthority from './pages/NoAuthority';
+import UserInfo from './pages/UserInfo';
+import BoardUp from './pages/BoardUp';
+import BoardRead from './pages/BoardRead';
 
 function App() {
   return (
@@ -22,7 +25,10 @@ function App() {
       <Route path="/admin" element={<Admin/>}/>
       <Route path="/user" element={<User/>}/>
       <Route path="/board" element={<Board/>}/>
-
+      <Route path="/noauthority" element={<NoAuthority/>}/>
+      <Route path="/user-info" element={<UserInfo/>}/>
+      <Route path="/board-up" element={<BoardUp/>}/>
+      <Route path="/board/:id" element={<BoardRead/>}/>
       </Routes>
     </div>
   );

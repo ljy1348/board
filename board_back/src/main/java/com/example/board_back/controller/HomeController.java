@@ -69,6 +69,7 @@ public class HomeController {
 
     @PutMapping("/register")
     public ResponseEntity<Object> register(@RequestBody Account account) {
+        System.out.println("레지스터 시작");
         try {
             accountService.registry(account);
             return new ResponseEntity<>(HttpStatus.OK);

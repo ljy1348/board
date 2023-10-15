@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
 
@@ -9,6 +10,7 @@ function Register() {
     }
 
     const [reg, setReg] = useState(initReg);
+    const navigate = useNavigate();
 
     let inputChange = (event) => {
         setReg({...reg, [event.target.name]:event.target.value});
@@ -18,8 +20,7 @@ function Register() {
       event.preventDefault();
         axios.put('/api/register', reg)
         .then(response => {
-            console.log(response);
-
+           navigate("/");
           })
           .catch(error => {
             console.log(error);
