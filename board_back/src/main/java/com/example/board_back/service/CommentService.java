@@ -38,14 +38,21 @@ public class CommentService {
     }
 
     @Transactional
-    public void delete(long id, long boardId) {
-        Optional<BoardModel> optional = boardRepository.findById(boardId);
-        if (optional.isPresent()) {
-            BoardModel boardModel = optional.get();
-            boardModel.setCommentCount(boardModel.getCommentCount()-1);
-            boardRepository.save(boardModel);
+    public void delete(long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Optional<CommentModel> optional = commentRepository.findById(id);
+        CommentModel commentModel;
+        if (optional.isPresent())  commentModel = optional.get();
+        else throw new IllegalArgumentException("본인이 작성한 댓글이 아닙니다.");
+        if (commentModel.getCommentAuthor().equals(auth.getName())) {
+            Optional<BoardModel> optional2 = boardRepository.findById(commentModel.getBoardId());
+            if (optional.isPresent()) {
+                BoardModel boardModel = optional2.get();
+                boardModel.setCommentCount(boardModel.getCommentCount() - 1);
+                boardRepository.save(boardModel);
+            }
+            System.out.println(id);
+            commentRepository.deleteByCommentId(id);
         }
-        System.out.println(id);
-        commentRepository.deleteByCommentId(id);
     }
 }

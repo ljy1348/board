@@ -21,12 +21,12 @@ function Board() {
     axios.get("/board/read/"+id)
     .then(response => {
       setBoard(response.data);
-      const byteCharacters = atob(board.attachments);
+      const byteCharacters = atob(response.data.attachments);
       const byteNumbers = Array.from(byteCharacters).map(char => char.charCodeAt(0));
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray], { type: "application/octet-stream" });
       setDownURL(URL.createObjectURL(blob));
-      setComment({...comment, boardId:id});
+      setComment({...response.data, boardId:id});
     })
     .catch(error =>{
 

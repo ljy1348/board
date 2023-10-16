@@ -48,7 +48,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http    .httpBasic().disable().cors().and()
                 .authorizeRequests()
                 .antMatchers("/","/api/register","/api/login").permitAll()
-                .antMatchers("/api/user/**","/board/up", "/board/comment/add").hasAnyRole("USER","ADMIN","SUPER_ADMIN")
+                .antMatchers("/api/user/**","/board/up", "/board/comment/add","/board/comment/delete/*").hasAnyRole("USER","ADMIN","SUPER_ADMIN")
                 .antMatchers("/api/admin/**").hasAnyRole("ADMIN","SUPER_ADMIN")
                 .anyRequest().permitAll()
                 .and()

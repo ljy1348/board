@@ -43,7 +43,7 @@ function Comment({ id }) {
 
   // 댓글 삭제
   const onClickDelete = (e) => {
-    axios.delete("/board/comment/delete/"+e.target.value+"&"+id, {headers: { 'Authorization': localStorage.getItem('token') },})
+    axios.delete("/board/comment/delete/"+e.target.value, {headers: { 'Authorization': localStorage.getItem('token') },})
     .then(response => {setRender(reder+1)})
     .catch(error =>{});
 };

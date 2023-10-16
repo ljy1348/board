@@ -29,12 +29,11 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/comment/delete/{id}&{boardId}")
+    @DeleteMapping("/comment/delete/{id}")
     public ResponseEntity<?> delete(
-            @PathVariable long id,
-            @PathVariable long boardId) {
+            @PathVariable long id) {
         System.out.println("딜리트 컨트롤러");
-        commentService.delete(id,boardId);
+        commentService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
