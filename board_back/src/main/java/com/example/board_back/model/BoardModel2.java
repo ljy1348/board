@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class BoardModel {
+public class BoardModel2 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
@@ -37,7 +37,7 @@ public class BoardModel {
     int vote;
     String attachmentsData;
     @Lob
-    private byte[] attachments;
+    private String attachments;
     @Column(columnDefinition = "boolean default false")
     private boolean isPinned;
     @Column(columnDefinition = "int default 0")

@@ -1,0 +1,10 @@
+.commentCount{
+    color: skyblue;
+    font-size: 12px;
+}
+.title{
+    display: inline-block;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+}

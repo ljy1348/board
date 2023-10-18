@@ -20,10 +20,9 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public List<BoardModel> boardList(Pageable pageable) {
+    public Page<BoardModel> boardList(Pageable pageable) {
         Page<BoardModel> page = boardRepository.findAll(pageable);
-        List<BoardModel> list = page.getContent();
-        return list;
+        return page;
     }
 
     public Optional<BoardModel> findId(long id) {
