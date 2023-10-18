@@ -3,6 +3,8 @@ package com.example.board_back.service;
 import com.example.board_back.model.BoardModel;
 import com.example.board_back.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +20,9 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public List<BoardModel> boardList() {
-        List<BoardModel> list = boardRepository.findAllByOrderByIdDesc();
+    public List<BoardModel> boardList(Pageable pageable) {
+        Page<BoardModel> page = boardRepository.findAll(pageable);
+        List<BoardModel> list = page.getContent();
         return list;
     }
 
