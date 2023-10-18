@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link,useNavigate  } from 'react-router-dom';
 
-function Header() {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+function Header({isLogin, setIsLogin}:{isLogin:boolean, setIsLogin:React.Dispatch<React.SetStateAction<boolean>>}) {
+  // const [isLogin, setIsLogin] = useState<boolean>(false);
   const navi = useNavigate();
 
   const onClickLogout = () => {

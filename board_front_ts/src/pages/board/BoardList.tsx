@@ -60,7 +60,10 @@ function BoardList({}) {
     </tr>
   </thead>
   <tbody>
-    {boardList.map((val, idx)=>(
+    {boardList.map((val, idx)=>{
+      const date = new Date(val.insertDate);
+      const formattedDate = `${date.getFullYear()-2000}-${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+      return (
         <tr key={val.id}>
         <td>{val.id}</td>
         <td><Link to={"/board/r/"+val.id}><span className='title'>{val.title}</span></Link> <span className='commentCount'>{val.commentCount}</span>
@@ -68,9 +71,10 @@ function BoardList({}) {
         <span><img src='/img/file.png'></img></span>}
         </td> 
         <td>{val.author}</td>
-        <td>{val.insertDate}</td>
+        <td>{formattedDate}</td>
       </tr>
-    ))
+      );
+      })
     }
   </tbody>
   

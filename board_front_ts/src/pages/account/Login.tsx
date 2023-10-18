@@ -3,7 +3,7 @@ import Account from '../../types/Account';
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
 
-function Login() {
+function Login({setIsLogin}:{setIsLogin:React.Dispatch<React.SetStateAction<boolean>>}) {
     const [login, setLogin] = useState<Account>({username:"",password:""});
     const navi = useNavigate();
 
@@ -23,7 +23,8 @@ function Login() {
                 const decod = JSON.parse(window.atob(base64));
                 localStorage.setItem('exp',decod.exp);
                 localStorage.setItem('name',decod.sub);
-                window.location.replace("/");
+                setIsLogin(true);
+                navi(-1);
             })
         .catch(error => {console.log(error)});
         

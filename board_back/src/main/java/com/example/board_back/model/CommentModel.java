@@ -23,4 +23,9 @@ public class CommentModel {
 
     @Column(nullable = false)
     String commentContent;
+
+    @Column(nullable = false, columnDefinition = "int default 0")
+    int isReComment;
+
+    long parentCommentId;
 }

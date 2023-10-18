@@ -28,6 +28,7 @@ public class BoardModel {
     private String author;
 
     @CreationTimestamp
+    @Column(columnDefinition = "date default sysdate")
     private LocalDateTime insertDate;
 
     @UpdateTimestamp

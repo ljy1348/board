@@ -21,12 +21,12 @@ public class CommentService {
     @Autowired
     BoardRepository boardRepository;
 
-    public List<CommentModel> findCommentId(long id) {
-        List<CommentModel> list = commentRepository.findByBoardId(id);
+    public List<CommentModel> findBoardId(long id) {
+        List<CommentModel> list = commentRepository.findByBoardIdOrderByParentCommentId(id);
         return list;
     }
 
-    public void add(CommentModel commentModel) {
+    public CommentModel add(CommentModel commentModel) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<BoardModel> boardModel = boardRepository.findById(commentModel.getBoardId());
         if (boardModel.isPresent()) {BoardModel boardModel1 = boardModel.get();
@@ -34,7 +34,7 @@ public class CommentService {
                 boardRepository.save(boardModel1);}
         if (auth.getName().equals("anonymousUser")) commentModel.setCommentAuthor(null);
         else commentModel.setCommentAuthor(auth.getName());
-        commentRepository.save(commentModel);
+        return commentRepository.save(commentModel);
     }
 
     @Transactional
@@ -55,4 +55,16 @@ public class CommentService {
             commentRepository.deleteByCommentId(id);
         }
     }
+
+    public void edit(CommentModel commentModel) {
+        commentRepository.save(commentModel);
+
+    }
+
+    public Optional<CommentModel> findByCommentId(long id) {
+        Optional<CommentModel> optional = commentRepository.findById(id);
+        return optional;
+    }
+
+
 }

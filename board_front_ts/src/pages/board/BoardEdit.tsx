@@ -8,10 +8,12 @@ import { Link,useNavigate, useParams  } from 'react-router-dom';
 
 function BoardWrite() {
 
-  const [board, setBoard] = useState({title:"", content:"", attachmentsData:""});
+  const initBoard = {id:0 ,title:"", content:"", attachmentsData:""}
+  const [board, setBoard] = useState(initBoard);
   const [fileList, setFileList] = useState<File[] | null>([]);
-  const [fileCount, setFileCount] = useState<number[]>([0]);
   const navi = useNavigate();
+  const {id} = useParams();
+  const [render, setRender] = useState(0);
 
 
     // page 로딩 될 때 로그인 확인(토큰 만료 확인)
@@ -23,14 +25,20 @@ function BoardWrite() {
       if (localStorage.getItem('token') == null) {
         return navi("/login");
       }
-      axios.get('/api/user/token', {headers: { 'Authorization': localStorage.getItem('token') }} )
-          .then(response => {})
+
+      axios.get('/board/user/edit/'+id, {headers: { 'Authorization': localStorage.getItem('token') }} )
+          .then(response => {
+            setBoard({...board, id:response.data.id, title:response.data.title, content:response.data.content});
+            // setBoard(response.data);
+            setRender(1);
+          })
             .catch(error => {
               if (error.message === "Request failed with status code 403") {
                 navi(-1);
               }
 
             })
+
             const lastTime = performance.now();
             console.log(lastTime-startTime);
     },[]);
@@ -80,7 +88,8 @@ function BoardWrite() {
       if (fileList) {
         formData.append("file", fileList[0]);
       }
-      axios.post("/board/user/up", formData, {headers: {
+      console.log(formData.get('board'));
+      axios.put("/board/user/edit", formData, {headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: localStorage.getItem("token")
       }})
@@ -111,14 +120,11 @@ function BoardWrite() {
           extraPlugins: [MyCustomUploadAdapterPlugin],
         }}
         editor={ClassicEditor}
-        data="<p></p>"
-        onReady={(editor) => {
-        }}
+        data={board.content}
         onChange={(event, editor:any) => {
+          if (render > 0)
           setBoard({...board, content:editor.getData()});
         }}
-        onBlur={(event, editor) => {}}
-        onFocus={(event, editor) => {}}
       />
       <br/>
           <input type="file" name="filename" onChange={onChangeFile}></input>

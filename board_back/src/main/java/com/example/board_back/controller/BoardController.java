@@ -29,7 +29,7 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
-    @PostMapping("/up")
+    @PostMapping("/user/up")
     public ResponseEntity<Object> upload(@RequestParam(name = "file", required = false) MultipartFile file, @RequestParam("board") String board) {
         byte[] byteFile = null;
         ObjectMapper objectMapper = new ObjectMapper();
@@ -75,5 +75,63 @@ public class BoardController {
         }
     }
 
+    @GetMapping("/user/edit/{id}")
+    public ResponseEntity<?> editById(@PathVariable long id) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            Optional<BoardModel> optional = boardService.findId(id);
+            if (optional.isPresent()) {
+                BoardModel boardModel = optional.get();
+                if (boardModel.getAuthor().equals(auth.getName())) {
+                return new ResponseEntity<>(boardModel, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("본인이 작성한 게시물이 아닙니다.", HttpStatus.FORBIDDEN);
+                }
+            } else {
+                return new ResponseEntity<>("게시물을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+                return new ResponseEntity<>("서버와 연결할 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @PutMapping("/user/edit")
+    public ResponseEntity<Object> edit(@RequestParam(name = "file", required = false) MultipartFile file, @RequestParam("board") String board) {
+        byte[] byteFile = null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        BoardModel boardModel;
+        try {
+            boardModel = objectMapper.readValue(board, BoardModel.class);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            byteFile = file.getBytes();
+            boardModel.setAttachmentsData(file.getOriginalFilename());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            Optional<BoardModel> optional = boardService.findId(boardModel.getId());
+            BoardModel boardModel1 = optional.get();
+            if (!boardModel1.getAuthor().equals(auth.getName())){
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+            boardModel.setInsertDate(boardModel1.getInsertDate());
+            boardModel.setAuthor(auth.getName());
+            boardModel.setAttachments(byteFile);
+            boardService.insert(boardModel);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/user/delete/{id}")
+    public ResponseEntity<?> boardDelete(@PathVariable long id) {
+        return boardService.boardDelete(id);
+    }
 
 }
